@@ -23,6 +23,9 @@ module.exports = {
         resp.setDescription(
           'กลุ่มต้าวๆที่ถือครองเหรียญ Sniffs มากที่สุดในขณะนี้'
         )
+        resp.setThumbnail(
+          'https://static-cdn.jtvnw.net/emoticons/v2/308087262/default/dark/3.0'
+        )
         await got.post(
           `https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`,
           {
