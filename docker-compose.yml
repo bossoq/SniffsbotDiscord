@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  discordjs:
+    build: .
+    container_name: discordjs
+    networks:
+      br0:
+        ipv4_address: '10.0.3.98'
+
+network:
+  br0:
+    external:
+      name: br0
