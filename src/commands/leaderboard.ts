@@ -1,15 +1,16 @@
 import got from 'got'
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { getLeader } from '../lib/supabase'
-import { CommandInteraction, MessageEmbed } from 'discord.js'
+import { CommandInteraction } from 'discord.js'
 import { embedMessageBuilder } from '../lib/MessageEmbed'
+import { allowChannel } from '../config.json'
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('leaderboard')
     .setDescription('Retrieve Sniffscoin Leaderboard!'),
   async execute(interaction: CommandInteraction) {
-    if (interaction.channelId === '882101106623283233') {
+    if (interaction.channelId === allowChannel) {
       const leaderboard = await getLeader(20)
       if (leaderboard.length) {
         const resp = embedMessageBuilder(

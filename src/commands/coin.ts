@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { getCoin } from '../lib/supabase'
 import { CommandInteraction, MessageEmbed } from 'discord.js'
 import { embedMessageBuilder } from '../lib/MessageEmbed'
+import { allowChannel } from '../config.json'
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction: CommandInteraction) {
-    if (interaction.channelId === '882101106623283233') {
+    if (interaction.channelId === allowChannel) {
       const twitchId: string = interaction.options.getString('twitchid') || ''
       const coin: number | undefined = await getCoin(twitchId.toLowerCase())
       let resp: MessageEmbed

@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { CommandInteraction, MessageEmbed } from 'discord.js'
+import { CommandInteraction } from 'discord.js'
+import { allowChannel } from '../config.json'
 
 const twitchRepo: string = 'https://github.com/Ponny035/SniffsLiveTwitchBot'
 const discordRepo: string = 'https://github.com/bossoq/SniffsbotDiscord'
@@ -10,7 +11,7 @@ module.exports = {
     .setName('github')
     .setDescription('Retrieve Github Link!'),
   async execute(interaction: CommandInteraction) {
-    if (interaction.channelId === '882101106623283233') {
+    if (interaction.channelId === allowChannel) {
       interaction.reply(
         `Twitch Bot: ${twitchRepo}\nDiscord Bot: ${discordRepo}\nWebfeed Repo: ${webfeedRepo}`
       )
