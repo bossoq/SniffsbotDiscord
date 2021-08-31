@@ -12,7 +12,9 @@ import {
   preparedLiveNotify,
   preparedCoinFlip,
   preparedLottoBuy,
-  preparedLottoDraw
+  preparedLottoDraw,
+  preparedRaffleBuy,
+  preparedRaffleDraw
 } from './lib/PreparedMessage'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { Types } from 'ably'
@@ -125,6 +127,18 @@ subMessage('webfeed', async (message: Types.Message) => {
       await sendMessage(
         allowChannel,
         preparedLottoDraw(JSON.parse(message.data))
+      )
+      break
+    case 'rafflebuy':
+      await sendMessage(
+        allowChannel,
+        preparedRaffleBuy(JSON.parse(message.data))
+      )
+      break
+    case 'raffledraw':
+      await sendMessage(
+        allowChannel,
+        preparedRaffleDraw(JSON.parse(message.data))
       )
       break
     default:

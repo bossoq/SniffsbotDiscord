@@ -106,5 +106,35 @@ export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
     .setDescription(
       `เลขที่ออกได้แก่ ${payload.win_number} รางวัลรวม ${payload.payout} Sniffscoin`
     )
+    .setThumbnail(
+      'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
+    )
+  return { embeds: [resp] }
+}
+
+export const preparedRaffleBuy = (payload: { [k: string]: any }): SendEmbed => {
+  const resp = embedMessageBuilder([
+    {
+      name: `<${payload.username}>`,
+      value: `ซื้อตั๋วชิงโชค ${payload.count} ใบสำเร็จ`
+    }
+  ])
+  return { embeds: [resp] }
+}
+
+export const preparedRaffleDraw = (payload: {
+  [k: string]: any
+}): SendEmbed => {
+  const resp = embedMessageBuilder([
+    {
+      name: `<${payload.username}>`,
+      value: 'ได้รับรางวัลจากตั๋วชิงโชคคร่าาาา~~'
+    }
+  ])
+  resp
+    .setTitle('ประกาศรางวัลจากตั๋วชิงโชค')
+    .setThumbnail(
+      'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
+    )
   return { embeds: [resp] }
 }
