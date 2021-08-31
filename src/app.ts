@@ -8,7 +8,7 @@ import {
 } from 'discord.js'
 import { subMessage } from './lib/AblySub'
 import { guildId, announceChannel, token } from './config.json'
-import { preparedLiveNotify } from './lib/LiveNotify'
+import { preparedLiveNotify, preparedCoinFlip } from './lib/PreparedMessage'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { Types } from 'ably'
 import type { SendEmbed } from './lib/MessageEmbed'
@@ -94,9 +94,13 @@ const sendMessage = async (message: string | SendEmbed): Promise<void> => {
 client.login(token)
 
 subMessage('webfeed', async (message: Types.Message) => {
-  if (message.name === 'discordmessage') {
-    await sendMessage(message.data)
-  } else if (message.name === 'livemessage') {
-    await sendMessage(preparedLiveNotify(JSON.parse(message.data)))
+  switch (message.name) {
+    case 'livemessage':
+      await sendMessage(preparedLiveNotify(JSON.parse(message.data)))
+      break
+    case 'coinflip':
+      await sendMessage(preparedCoinFlip(JSON.parse(message.data)))
+    default:
+      break
   }
 })
