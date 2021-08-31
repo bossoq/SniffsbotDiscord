@@ -9,6 +9,7 @@ type Message = {
 export type SendEmbed = {
   content?: string
   embeds: MessageEmbed[]
+  ephemeral?: boolean
 }
 
 const footer: string =

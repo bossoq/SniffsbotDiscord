@@ -75,3 +75,36 @@ export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
   }
   return { embeds: [resp] }
 }
+
+export const preparedLottoBuy = (payload: { [k: string]: any }): SendEmbed => {
+  const resp = embedMessageBuilder([
+    {
+      name: `<${payload.username}>`,
+      value: `ซื้อ SniffsLotto หมายเลข ${payload.lotto.toString()} สำเร็จ`
+    }
+  ])
+  return { embeds: [resp] }
+}
+
+export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
+  let resp: MessageEmbed
+  if (Object.entries(payload.usernames)) {
+    resp = embedMessageBuilder(
+      Object.entries(payload.usernames).map(([username, prize]) => ({
+        name: `<${username}>`,
+        value: `ได้รับ ${prize} Sniffscoin`,
+        inline: true
+      }))
+    )
+  } else {
+    resp = embedMessageBuilder([])
+  }
+  resp
+    .setTitle(
+      `ประกาศผลรางวัล Sniffscoin ประจำวันที่ ${new Date().toLocaleDateString()}`
+    )
+    .setDescription(
+      `เลขที่ออกได้แก่ ${payload.win_number} รางวัลรวม ${payload.payout} Sniffscoin`
+    )
+  return { embeds: [resp] }
+}

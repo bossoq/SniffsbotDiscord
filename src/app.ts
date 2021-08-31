@@ -7,8 +7,13 @@ import {
   TextChannel
 } from 'discord.js'
 import { subMessage } from './lib/AblySub'
-import { guildId, announceChannel, token } from './config.json'
-import { preparedLiveNotify, preparedCoinFlip } from './lib/PreparedMessage'
+import { guildId, token, announceChannel, allowChannel } from './config.json'
+import {
+  preparedLiveNotify,
+  preparedCoinFlip,
+  preparedLottoBuy,
+  preparedLottoDraw
+} from './lib/PreparedMessage'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { Types } from 'ably'
 import type { SendEmbed } from './lib/MessageEmbed'
@@ -71,7 +76,10 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   }
 })
 
-const sendMessage = async (message: string | SendEmbed): Promise<void> => {
+const sendMessage = async (
+  channelId: string,
+  message: string | SendEmbed
+): Promise<void> => {
   const guild = client.guilds.cache.find((guild) => guild.id === guildId)
 
   if (!guild) {
@@ -80,7 +88,7 @@ const sendMessage = async (message: string | SendEmbed): Promise<void> => {
   }
 
   const channel: TextChannel = guild.channels.cache.find(
-    (channel) => channel.id === announceChannel
+    (channel) => channel.id === channelId
   ) as TextChannel
 
   if (!channel) {
@@ -96,10 +104,29 @@ client.login(token)
 subMessage('webfeed', async (message: Types.Message) => {
   switch (message.name) {
     case 'livemessage':
-      await sendMessage(preparedLiveNotify(JSON.parse(message.data)))
+      await sendMessage(
+        announceChannel,
+        preparedLiveNotify(JSON.parse(message.data))
+      )
       break
     case 'coinflip':
-      await sendMessage(preparedCoinFlip(JSON.parse(message.data)))
+      await sendMessage(
+        allowChannel,
+        preparedCoinFlip(JSON.parse(message.data))
+      )
+      break
+    case 'lottobuy':
+      await sendMessage(
+        allowChannel,
+        preparedLottoBuy(JSON.parse(message.data))
+      )
+      break
+    case 'lottodraw':
+      await sendMessage(
+        allowChannel,
+        preparedLottoDraw(JSON.parse(message.data))
+      )
+      break
     default:
       break
   }
