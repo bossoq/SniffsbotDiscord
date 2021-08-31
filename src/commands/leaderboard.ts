@@ -7,7 +7,7 @@ import { embedMessageBuilder } from '../lib/MessageEmbed'
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('leaderboard')
-    .setDescription('Retrieve Sniffscoin amount!'),
+    .setDescription('Retrieve Sniffscoin Leaderboard!'),
   async execute(interaction: CommandInteraction) {
     if (interaction.channelId === '882101106623283233') {
       const leaderboard = await getLeader(20)
