@@ -2,12 +2,14 @@ FROM node:16-buster-slim
 
 WORKDIR /app
 
-COPY /src ./src
-
 COPY package.json .
 
-COPY config.json ./src/
+COPY tsconfig.json .
 
 RUN yarn
+
+COPY /src ./src
+
+COPY config.json ./src/
 
 CMD ["yarn", "dev"]
