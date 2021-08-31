@@ -4,7 +4,6 @@ import type { SendEmbed } from '../lib/MessageEmbed'
 export const preparedLiveNotify = (payload: {
   [k: string]: any
 }): SendEmbed => {
-  console.log(JSON.stringify(payload))
   const embedMessage = embedMessageBuilder([
     {
       name: 'Game',
@@ -22,7 +21,6 @@ export const preparedLiveNotify = (payload: {
     .setURL(`https://www.twitch.tv/${payload.user_name.toLowerCase()}`)
     .setAuthor(payload.user_name, payload.profile)
     .setThumbnail(payload.profile)
-  console.log(embedMessage)
   return {
     content: `ทุกโคนน @everyone, ${
       payload.user_name
