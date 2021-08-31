@@ -1,9 +1,12 @@
-import got from 'got'
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { getCoin } from '../lib/supabase'
 import { CommandInteraction, MessageEmbed } from 'discord.js'
-import { embedMessageBuilder } from '../lib/MessageEmbed'
+import { embedMessageBuilder, SendEmbed } from '../lib/MessageEmbed'
 import { allowChannel } from '../config.json'
+
+interface ExtendsInteraction extends CommandInteraction {
+  reply(options: SendEmbed | any): Promise<void | any>
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,7 +18,7 @@ module.exports = {
         .setDescription('Input Twitch ID')
         .setRequired(true)
     ),
-  async execute(interaction: CommandInteraction): Promise<void> {
+  async execute(interaction: ExtendsInteraction): Promise<void> {
     if (interaction.channelId === allowChannel) {
       const twitchId: string = interaction.options.getString('twitchid') || ''
       const coin: number | undefined = await getCoin(twitchId.toLowerCase())
@@ -35,18 +38,9 @@ module.exports = {
           }
         ])
       }
-      await got.post(
-        `https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`,
-        {
-          json: {
-            type: 4,
-            data: {
-              embeds: [resp],
-              flags: 64
-            }
-          }
-        }
-      )
+      interaction.reply({
+        embeds: [resp]
+      })
     }
   }
 }

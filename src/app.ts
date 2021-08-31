@@ -6,8 +6,12 @@ import {
   Interaction,
   TextChannel
 } from 'discord.js'
+import { subMessage } from './lib/AblySub'
 import { guildId, announceChannel, token } from './config.json'
-import { SlashCommandBuilder } from '@discordjs/builders'
+import { preparedMessage } from './lib/LiveNotify'
+import type { SlashCommandBuilder } from '@discordjs/builders'
+import type { Types } from 'ably'
+import type { SendEmbed } from './lib/MessageEmbed'
 
 declare module 'discord.js' {
   interface Client {
@@ -16,6 +20,11 @@ declare module 'discord.js' {
   interface Command extends NodeModule {
     data: SlashCommandBuilder
     execute(interaction: CommandInteraction): Promise<any>
+  }
+  interface TextWithEmbed extends TextChannel {
+    send(
+      options: string | MessagePayload | MessageOptions | SendEmbed
+    ): Promise<Message>
   }
 }
 
@@ -62,7 +71,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   }
 })
 
-const sendMessage = async (message: string): Promise<void> => {
+const sendMessage = async (message: string | SendEmbed): Promise<void> => {
   const guild = client.guilds.cache.find((guild) => guild.id === guildId)
 
   if (!guild) {
@@ -83,3 +92,11 @@ const sendMessage = async (message: string): Promise<void> => {
 }
 
 client.login(token)
+
+subMessage('webfeed', (message: Types.Message) => {
+  if (message.name === 'discordmessage') {
+    sendMessage(message.data)
+  } else if (message.name === 'livemessage') {
+    sendMessage(preparedMessage(JSON.parse(message.data)))
+  }
+})

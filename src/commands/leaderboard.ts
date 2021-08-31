@@ -1,15 +1,18 @@
-import got from 'got'
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { getLeader } from '../lib/supabase'
 import { CommandInteraction } from 'discord.js'
-import { embedMessageBuilder } from '../lib/MessageEmbed'
+import { embedMessageBuilder, SendEmbed } from '../lib/MessageEmbed'
 import { allowChannel } from '../config.json'
+
+interface ExtendsInteraction extends CommandInteraction {
+  reply(options: SendEmbed | any): Promise<void | any>
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('leaderboard')
     .setDescription('Retrieve Sniffscoin Leaderboard!'),
-  async execute(interaction: CommandInteraction): Promise<void> {
+  async execute(interaction: ExtendsInteraction): Promise<void> {
     if (interaction.channelId === allowChannel) {
       const leaderboard = await getLeader(20)
       if (leaderboard.length) {
@@ -27,18 +30,9 @@ module.exports = {
         resp.setThumbnail(
           'https://static-cdn.jtvnw.net/emoticons/v2/308087262/default/dark/3.0'
         )
-        await got.post(
-          `https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`,
-          {
-            json: {
-              type: 4,
-              data: {
-                embeds: [resp],
-                flags: 64
-              }
-            }
-          }
-        )
+        interaction.reply({
+          embeds: [resp]
+        })
       } else {
         interaction.reply('ไม่สามารถดึงข้อมูลเหรียญได้')
       }

@@ -6,6 +6,11 @@ type Message = {
   inline?: boolean
 }
 
+export type SendEmbed = {
+  content?: string
+  embeds: MessageEmbed[]
+}
+
 const footer: string =
   'Contribute @ github: https://github.com/bossoq/SniffsbotDiscord'
 
