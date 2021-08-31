@@ -1,7 +1,9 @@
 import { embedMessageBuilder } from './MessageEmbed'
 import type { SendEmbed } from '../lib/MessageEmbed'
 
-export const preparedMessage = (payload: { [k: string]: any }): SendEmbed => {
+export const preparedLiveNotify = (payload: {
+  [k: string]: any
+}): SendEmbed => {
   console.log(JSON.stringify(payload))
   const embedMessage = embedMessageBuilder([
     {
