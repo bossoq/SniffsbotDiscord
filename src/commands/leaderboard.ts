@@ -19,6 +19,10 @@ module.exports = {
             inline: idx >= 5
           }))
         )
+        resp.setTitle('รายชื่อผู้ร่ำรวย Sniffscoin')
+        resp.setDescription(
+          'กลุ่มต้าวๆที่ถือครองเหรียญ Sniffs มากที่สุดในขณะนี้'
+        )
         await got.post(
           `https://discord.com/api/v8/interactions/${interaction.id}/${interaction.token}/callback`,
           {
