@@ -10,7 +10,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('github')
     .setDescription('Retrieve Github Link!'),
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: CommandInteraction): Promise<void> {
     if (interaction.channelId === allowChannel) {
       interaction.reply(
         `Twitch Bot: ${twitchRepo}\nDiscord Bot: ${discordRepo}\nWebfeed Repo: ${webfeedRepo}`

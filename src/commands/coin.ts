@@ -15,7 +15,7 @@ module.exports = {
         .setDescription('Input Twitch ID')
         .setRequired(true)
     ),
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: CommandInteraction): Promise<void> {
     if (interaction.channelId === allowChannel) {
       const twitchId: string = interaction.options.getString('twitchid') || ''
       const coin: number | undefined = await getCoin(twitchId.toLowerCase())

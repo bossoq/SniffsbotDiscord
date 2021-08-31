@@ -9,7 +9,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('leaderboard')
     .setDescription('Retrieve Sniffscoin Leaderboard!'),
-  async execute(interaction: CommandInteraction) {
+  async execute(interaction: CommandInteraction): Promise<void> {
     if (interaction.channelId === allowChannel) {
       const leaderboard = await getLeader(20)
       if (leaderboard.length) {
