@@ -24,6 +24,9 @@ export const preparedLiveNotify = (payload: {
     .setURL(`https://www.twitch.tv/${payload.user_name.toLowerCase()}`)
     .setAuthor(payload.user_name, profileImg)
     .setThumbnail(profileImg)
+    .setImage(
+      payload.thumbnail_url.replace('{width}', '320').replace('{height}', '180')
+    )
   return {
     content: `ทุกโคนน @everyone, ${
       payload.user_name

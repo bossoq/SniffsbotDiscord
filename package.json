@@ -1,5 +1,5 @@
 {
-  "name": "SniffsbotDiscord",
+  "name": "sniffsbotdiscord",
   "version": "1.0.0",
   "description": "Sniffsbot Discord Client",
   "main": "index.ts",
@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./bin/app.js",
-    "dev": "ts-node ./src/app.ts"
+    "dev": "ts-node ./src/app.ts",
+    "cmd:deploy": "ts-node src/deploy-commands.ts"
   },
   "dependencies": {
     "@discordjs/builders": "^0.6.0",
