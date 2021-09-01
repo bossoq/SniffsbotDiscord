@@ -14,11 +14,14 @@ export type SendEmbed = {
 
 const footer: string =
   'Contribute @ github: https://github.com/bossoq/SniffsbotDiscord'
+const footerImg: string =
+  'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/GitHub-Mark-64px.png'
 
 export const embedMessageBuilder = (messages: Message[]): MessageEmbed => {
-  const embedMessage = new MessageEmbed().setFooter(footer)
+  const embedMessage = new MessageEmbed().setFooter(footer, footerImg)
   messages.forEach((message: Message) => {
     embedMessage.addField(message.name, message.value, message.inline)
   })
+  embedMessage.setColor('#FF95C5')
   return embedMessage
 }

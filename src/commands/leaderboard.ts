@@ -25,7 +25,7 @@ module.exports = {
         .setTitle('รายชื่อผู้ร่ำรวย Sniffscoin')
         .setDescription('กลุ่มต้าวๆที่ถือครองเหรียญ Sniffs มากที่สุดในขณะนี้')
         .setThumbnail(
-          'https://static-cdn.jtvnw.net/emoticons/v2/308087262/default/dark/3.0'
+          'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsbaby.png'
         )
       interaction.reply({
         embeds: [resp],

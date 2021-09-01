@@ -5,6 +5,8 @@ import type { MessageEmbed } from 'discord.js'
 export const preparedLiveNotify = (payload: {
   [k: string]: any
 }): SendEmbed => {
+  const profileImg: string =
+    'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsprofile.png'
   const embedMessage = embedMessageBuilder([
     {
       name: 'Game',
@@ -20,8 +22,8 @@ export const preparedLiveNotify = (payload: {
   embedMessage
     .setTitle(payload.title)
     .setURL(`https://www.twitch.tv/${payload.user_name.toLowerCase()}`)
-    .setAuthor(payload.user_name, payload.profile)
-    .setThumbnail(payload.profile)
+    .setAuthor(payload.user_name, profileImg)
+    .setThumbnail(profileImg)
   return {
     content: `ทุกโคนน @everyone, ${
       payload.user_name
@@ -52,7 +54,7 @@ export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
     resp.setTitle(`<${payload.username}>`)
     resp.setDescription('ชนะการทอยเหรียญ')
     resp.setThumbnail(
-      'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
+      'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsheart.png'
     )
   } else {
     resp = embedMessageBuilder([
@@ -70,7 +72,7 @@ export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
     resp.setTitle(`<${payload.username}>`)
     resp.setDescription('เสียใจด้วยนะผีพนัน')
     resp.setThumbnail(
-      'https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_ed4f0c3c3b2b478488387b3f344a0039/default/dark/3.0'
+      'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffscry.png'
     )
   }
   return { embeds: [resp] }
@@ -107,7 +109,7 @@ export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
       `เลขที่ออกได้แก่ ${payload.win_number} รางวัลรวม ${payload.payout} Sniffscoin`
     )
     .setThumbnail(
-      'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
+      'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsheart.png'
     )
   return { embeds: [resp] }
 }
@@ -134,7 +136,7 @@ export const preparedRaffleDraw = (payload: {
   resp
     .setTitle('ประกาศรางวัลจากตั๋วชิงโชค')
     .setThumbnail(
-      'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
+      'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsheart.png'
     )
   return { embeds: [resp] }
 }
