@@ -50,7 +50,7 @@ export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
       }
     ])
     resp.setTitle(`<${payload.username}>`)
-    resp.setDescription('ชนะการทอดเหรียญ')
+    resp.setDescription('ชนะการทอยเหรียญ')
     resp.setThumbnail(
       'https://static-cdn.jtvnw.net/emoticons/v2/307598973/default/dark/3.0'
     )
