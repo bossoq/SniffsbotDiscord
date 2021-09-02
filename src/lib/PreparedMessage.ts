@@ -1,6 +1,7 @@
 import { embedMessageBuilder } from './MessageEmbed'
 import type { SendEmbed } from '../lib/MessageEmbed'
 import type { MessageEmbed } from 'discord.js'
+import { VideosMeta } from './YoutubeAPI'
 
 export const preparedLiveNotify = (payload: {
   [k: string]: any
@@ -142,4 +143,22 @@ export const preparedRaffleDraw = (payload: {
       'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsheart.png'
     )
   return { embeds: [resp] }
+}
+
+export const preparedYTNotify = (payload: VideosMeta): SendEmbed => {
+  const profileImg: string =
+    'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsprofile.png'
+  const youtubeImg: string =
+    'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/youtube.png'
+  const embedMessage = embedMessageBuilder([])
+  embedMessage
+    .setTitle(payload.title || 'YouTube Videos')
+    .setURL(`https://www.youtube.com/watch?v=${payload.id}`)
+    .setAuthor('YouTube', youtubeImg)
+    .setThumbnail(profileImg)
+    .setImage(payload.thumbnail || '')
+  return {
+    content: `นี่ๆ @everyone, SniffsLive ลงคลิปแล้วนะ <3 https://www.youtube.com/watch?v=${payload.id}`,
+    embeds: [embedMessage]
+  }
 }

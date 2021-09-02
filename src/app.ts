@@ -6,18 +6,10 @@ import {
   Interaction,
   TextChannel
 } from 'discord.js'
-import { subMessage } from './lib/AblySub'
-import { guildId, token, announceChannel, allowChannel } from './config.json'
-import {
-  preparedLiveNotify,
-  preparedCoinFlip,
-  preparedLottoBuy,
-  preparedLottoDraw,
-  preparedRaffleBuy,
-  preparedRaffleDraw
-} from './lib/PreparedMessage'
+import { ablyMessage } from './ably'
+import { startYTFetch } from './youtube-query'
+import { guildId, token } from './config.json'
 import type { SlashCommandBuilder } from '@discordjs/builders'
-import type { Types } from 'ably'
 import type { SendEmbed } from './lib/MessageEmbed'
 
 declare module 'discord.js' {
@@ -58,6 +50,18 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
   console.log(`Logged into Discord as ${client.user!.tag}`)
+  try {
+    ablyMessage()
+    console.log('Successfully sub to Ably')
+  } catch (error) {
+    console.error(`Failed to sub Ably ${error}`)
+  }
+  try {
+    startYTFetch()
+    console.log('Successfully start YT Fetch')
+  } catch (error) {
+    console.error('Failed to start YT Fetch')
+  }
 })
 
 client.on('interactionCreate', async (interaction: Interaction) => {
@@ -78,7 +82,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   }
 })
 
-const sendMessage = async (
+export const sendMessage = async (
   channelId: string,
   message: string | SendEmbed
 ): Promise<void> => {
@@ -102,46 +106,3 @@ const sendMessage = async (
 }
 
 client.login(token)
-
-subMessage('webfeed', async (message: Types.Message) => {
-  switch (message.name) {
-    case 'livemessage':
-      await sendMessage(
-        announceChannel,
-        preparedLiveNotify(JSON.parse(message.data))
-      )
-      break
-    case 'coinflip':
-      await sendMessage(
-        allowChannel,
-        preparedCoinFlip(JSON.parse(message.data))
-      )
-      break
-    case 'lottobuy':
-      await sendMessage(
-        allowChannel,
-        preparedLottoBuy(JSON.parse(message.data))
-      )
-      break
-    case 'lottodraw':
-      await sendMessage(
-        allowChannel,
-        preparedLottoDraw(JSON.parse(message.data))
-      )
-      break
-    case 'rafflebuy':
-      await sendMessage(
-        allowChannel,
-        preparedRaffleBuy(JSON.parse(message.data))
-      )
-      break
-    case 'raffledraw':
-      await sendMessage(
-        allowChannel,
-        preparedRaffleDraw(JSON.parse(message.data))
-      )
-      break
-    default:
-      break
-  }
-})

@@ -2,9 +2,10 @@ import {
   createClient,
   SupabaseClient,
   PostgrestResponse,
-  PostgrestSingleResponse,
+  PostgrestSingleResponse
 } from '@supabase/supabase-js'
-import { supabaseUrl, supabaseKey, table } from '../config.json'
+import { supabaseUrl, supabaseKey, table, ytTable } from '../config.json'
+import type { VideosMeta } from './YoutubeAPI'
 
 const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey)
 
@@ -63,4 +64,34 @@ export const getLeader = async (limit: number): Promise<LeaderBoard[]> => {
     })
   }
   return resp
+}
+
+export const insertYT = async (
+  videosMeta: VideosMeta[]
+): Promise<{ success: boolean; videosMeta?: VideosMeta[] }> => {
+  const { data: response, error }: PostgrestResponse<VideosMeta> =
+    await supabase.from<VideosMeta>(ytTable).insert(videosMeta)
+  if (response) {
+    return { success: true, videosMeta }
+  } else {
+    console.error(error)
+    return { success: false }
+  }
+}
+
+export const queryYT = async (
+  limit: number
+): Promise<VideosMeta[] | undefined> => {
+  const { data: response, error }: PostgrestResponse<VideosMeta> =
+    await supabase
+      .from<VideosMeta>(ytTable)
+      .select('*')
+      .limit(limit)
+      .order('publishTime', { ascending: false })
+  if (response) {
+    return response
+  } else {
+    console.error(error)
+    return
+  }
 }
