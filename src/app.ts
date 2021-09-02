@@ -70,10 +70,10 @@ client.once('ready', () => {
     )
 
     const activities = [
-      `${servers} server`,
+      `${servers} servers`,
       `looking ${servercount} members`,
       `uwu I'm stinky`,
-      `Watching twitch.tv/sinffslive`
+      `Watching twitch.tv/sniffslive`
     ]
     const status = activities[Math.floor(Math.random() * activities.length)]
     client!.user!.setPresence({ activities: [{ name: `${status}` }] })
