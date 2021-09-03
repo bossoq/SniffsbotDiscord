@@ -7,7 +7,7 @@ import {
   TextChannel
 } from 'discord.js'
 import { ablyMessage } from './ably'
-import { startYTFetch } from './youtube-query'
+import { YTHookService } from './youtubehook'
 import { guildId, token } from './config.json'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { SendEmbed } from './lib/MessageEmbed'
@@ -57,10 +57,10 @@ client.once('ready', () => {
     console.error(`Failed to sub Ably ${error}`)
   }
   try {
-    startYTFetch()
-    console.log('Successfully start YT Fetch')
+    YTHookService()
+    console.log('Successfully start YT Webhook')
   } catch (error) {
-    console.error('Failed to start YT Fetch')
+    console.error('Failed to start YT Webhook')
   }
 })
 
