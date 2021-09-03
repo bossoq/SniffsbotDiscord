@@ -1,7 +1,30 @@
 import { embedMessageBuilder } from './MessageEmbed'
 import type { SendEmbed } from '../lib/MessageEmbed'
 import type { MessageEmbed } from 'discord.js'
-import { VideosMeta } from './YoutubeAPI'
+import type { VideosMeta } from './YoutubeAPI'
+
+const thaiMonth: string[] = [
+  'มกราคม',
+  'กุมภาพันธ์',
+  'มีนาคม',
+  'เมษายน',
+  'พฤษภาคม',
+  'มิถุนายน',
+  'กรกฎาคม',
+  'สิงหาคม',
+  'กันยายน',
+  'ตุลาคม',
+  'พฤศจิกายน',
+  'ธันวาคม'
+]
+
+const getThaiDateString = () => {
+  const now = new Date()
+  const day = now.getDate()
+  const month = thaiMonth[now.getMonth() - 1]
+  const year = now.getFullYear() + 543
+  return `${day} ${month} ${year}`
+}
 
 export const preparedLiveNotify = (payload: {
   [k: string]: any
@@ -106,9 +129,7 @@ export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
     resp = embedMessageBuilder([])
   }
   resp
-    .setTitle(
-      `ประกาศผลรางวัล Sniffscoin ประจำวันที่ ${new Date().toLocaleDateString()}`
-    )
+    .setTitle(`ประกาศผลรางวัล Sniffscoin ประจำวันที่ ${getThaiDateString()}`)
     .setDescription(
       `เลขที่ออกได้แก่ ${payload.win_number} รางวัลรวม ${payload.payout} Sniffscoin`
     )
