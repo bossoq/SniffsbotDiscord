@@ -2,7 +2,17 @@ import express from 'express'
 import xmlparser from 'express-xml-bodyparser'
 import { sendMessage } from './app'
 import { preparedYTNotify } from './lib/PreparedMessage'
-import { announceChannel } from './config.json'
+import axios from 'axios'
+import { URLSearchParams } from 'url'
+import { REST } from '@discordjs/rest'
+import { OAuth2Routes, Routes } from 'discord-api-types/v9'
+import { queryTwitch, insertTwitch } from './lib/supabase'
+import {
+  announceChannel,
+  clientId,
+  clientSecret,
+  callbackUrl
+} from './config.json'
 import type { VideosMeta } from './lib/YoutubeAPI'
 
 export interface YTFeed {
@@ -50,6 +60,64 @@ export const YTHookService = () => {
       }
     }
   )
+
+  app.get('/twitchlink', async (req, res) => {
+    const code = String(req.query.code)
+    const state = String(req.query.state)
+    const discordId = String(req.query.state).slice(40)
+    const dbTwitch = await queryTwitch(discordId)
+    if (dbTwitch) {
+      if (state === dbTwitch.state) {
+        const params = new URLSearchParams()
+        params.append('client_id', clientId)
+        params.append('client_secret', clientSecret)
+        params.append('grant_type', 'authorization_code')
+        params.append('code', code)
+        params.append('redirect_uri', callbackUrl)
+        const response = await axios.post(OAuth2Routes.tokenURL, params, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          }
+        })
+        const authToken = response.data.access_token
+        const refreshToken = response.data.refresh_token
+        const rest = new REST({ version: '9' }).setToken(authToken)
+        const connections = await rest.get(Routes.userConnections(), {
+          authPrefix: 'Bearer'
+        })
+        const twitchData = (connections as Record<string, any>[]).find(
+          (connection) => connection.type === 'twitch'
+        )
+        if (twitchData) {
+          const twitchId = twitchData.name.toLowerCase()
+          const response = await insertTwitch({
+            discordId,
+            twitchId,
+            state,
+            code,
+            authToken,
+            refreshToken
+          })
+          if (response.success) {
+            res.send(
+              '<p>Succesfully connect your twitch account to SniffsBot<br>You can now close this windows</p>'
+            )
+          } else {
+            res
+              .status(503)
+              .send('<p>Please try again later (dbError: code 2)</p>')
+          }
+        } else {
+          res.send('<p>There is no Twitch connection in your Discord ID')
+        }
+      } else {
+        res.status(403).send('<p>Invalid State Token</p>')
+      }
+    } else {
+      res.status(503).send('<p>Please try again later (dbError: code 1)</p>')
+    }
+  })
+
   try {
     app.listen(port)
     console.log(`Successfully start Express Server on ${port}`)

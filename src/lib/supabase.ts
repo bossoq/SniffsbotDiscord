@@ -23,6 +23,15 @@ type LeaderBoard = {
   Coin: number
 }
 
+type TwitchTable = {
+  discordId?: string
+  twitchId?: string
+  state?: string
+  code?: string
+  authToken?: string
+  refreshToken?: string
+}
+
 export const getCoin = async (
   username: string
 ): Promise<number | undefined> => {
@@ -67,11 +76,11 @@ export const getLeader = async (limit: number): Promise<LeaderBoard[]> => {
 }
 
 export const insertYT = async (
-  videosMeta: VideosMeta[]
+  videosMetas: VideosMeta[]
 ): Promise<{ success: boolean; videosMeta?: VideosMeta[] }> => {
-  const { data: response, error }: PostgrestResponse<VideosMeta> =
-    await supabase.from<VideosMeta>(ytTable).insert(videosMeta)
-  if (response) {
+  const { data: videosMeta, error }: PostgrestResponse<VideosMeta> =
+    await supabase.from<VideosMeta>(ytTable).insert(videosMetas)
+  if (videosMeta) {
     return { success: true, videosMeta }
   } else {
     console.error(error)
@@ -93,5 +102,36 @@ export const queryYT = async (
   } else {
     console.error(error)
     return
+  }
+}
+
+export const queryTwitch = async (
+  discordId: string | undefined
+): Promise<TwitchTable | undefined> => {
+  if (!discordId) return
+  const { data: response, error }: PostgrestSingleResponse<TwitchTable> =
+    await supabase
+      .from<TwitchTable>('twitchlink')
+      .select('*')
+      .eq('discordId', discordId ? discordId : '*')
+      .single()
+  if (response) {
+    return response
+  } else {
+    console.error(error)
+    return
+  }
+}
+
+export const insertTwitch = async (
+  payload: TwitchTable
+): Promise<{ success: boolean; userData?: TwitchTable }> => {
+  const { data: userData, error }: PostgrestResponse<TwitchTable> =
+    await supabase.from<TwitchTable>('twitchlink').upsert(payload)
+  if (userData) {
+    return { success: true, ...userData }
+  } else {
+    console.error(error)
+    return { success: false }
   }
 }
