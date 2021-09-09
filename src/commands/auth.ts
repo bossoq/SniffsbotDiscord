@@ -22,19 +22,24 @@ module.exports = {
     if (!userData?.twitchId) {
       const response = await insertTwitch({ discordId, state })
       if (response.success) {
-        interaction.reply(
-          `[คลิกที่นี่เพื่อเชื่อมต่อบัญชี Twitch กับ SniffsBot](${baseUrl.replace(
+        interaction.reply({
+          content: `[คลิกที่นี่เพื่อเชื่อมต่อบัญชี Twitch กับ SniffsBot](${baseUrl.replace(
             '{state}',
             state
-          )})`
-        )
+          )})`,
+          ephemeral: true
+        })
       } else {
-        interaction.reply('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ ลองอีกครั้งทีหลังนะ')
+        interaction.reply({
+          content: 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ ลองอีกครั้งทีหลังนะ',
+          ephemeral: true
+        })
       }
     } else {
-      interaction.reply(
-        `เชื่อมต่อกับ Twitch ID: ${userData.twitchId} แล้วน้าาาา`
-      )
+      interaction.reply({
+        content: `เชื่อมต่อกับ Twitch ID: ${userData.twitchId} แล้วน้าาาา`,
+        ephemeral: true
+      })
     }
   }
 }
