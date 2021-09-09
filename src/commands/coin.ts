@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { getCoin } from '../lib/supabase'
+import { getCoin, queryTwitch } from '../lib/supabase'
 import { CommandInteraction, MessageEmbed } from 'discord.js'
 import { embedMessageBuilder, SendEmbed } from '../lib/MessageEmbed'
 
@@ -15,11 +15,26 @@ module.exports = {
       option
         .setName('twitchid')
         .setDescription('Input Twitch ID')
-        .setRequired(true)
+        .setRequired(false)
     ),
   async execute(interaction: ExtendsInteraction): Promise<void> {
-    const twitchId: string = interaction.options.getString('twitchid') || ''
-    const coin: number | undefined = await getCoin(twitchId.toLowerCase())
+    const discordId = interaction.member?.user.id
+    let twitchId: string | undefined
+    let inputId = interaction.options.getString('twitchid')
+    if (!inputId) {
+      const response = await queryTwitch(discordId)
+      if (response) {
+        if (response.twitchId) {
+          twitchId = response.twitchId
+        }
+      }
+    } else {
+      twitchId = inputId
+    }
+    let coin: number | undefined
+    if (twitchId) {
+      coin = await getCoin(twitchId.toLowerCase())
+    }
     let resp: MessageEmbed
     if (coin) {
       resp = embedMessageBuilder([
@@ -31,7 +46,7 @@ module.exports = {
     } else {
       resp = embedMessageBuilder([
         {
-          name: `<${twitchId}>`,
+          name: `<${twitchId ? twitchId : 'ไม่ใส่ Username'}>`,
           value: `ไม่พบ Username นี้ โปรใส่ Twitch Username...`
         }
       ])
