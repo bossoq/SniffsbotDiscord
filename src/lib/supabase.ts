@@ -4,7 +4,13 @@ import {
   PostgrestResponse,
   PostgrestSingleResponse
 } from '@supabase/supabase-js'
-import { supabaseUrl, supabaseKey, table, ytTable } from '../config.json'
+import {
+  supabaseUrl,
+  supabaseKey,
+  table,
+  ytTable,
+  twitchTable
+} from '../config.json'
 import type { VideosMeta } from './YoutubeAPI'
 
 const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey)
@@ -45,6 +51,23 @@ export const getCoin = async (
   if (userInfo) {
     coin = userInfo.Coin
     return coin
+  }
+}
+
+export const insertCoin = async ({
+  User_Name,
+  Coin
+}: {
+  User_Name: string
+  Coin: number
+}): Promise<{ success: boolean }> => {
+  const { data: response, error }: PostgrestResponse<QueryResponse> =
+    await supabase.from<QueryResponse>(table).upsert({ User_Name, Coin })
+  if (response) {
+    return { success: true }
+  } else {
+    console.error(error)
+    return { success: false }
   }
 }
 
@@ -111,7 +134,7 @@ export const queryTwitch = async (
   if (!discordId) return
   const { data: response, error }: PostgrestSingleResponse<TwitchTable> =
     await supabase
-      .from<TwitchTable>('twitchlink')
+      .from<TwitchTable>(twitchTable)
       .select('*')
       .eq('discordId', discordId ? discordId : '*')
       .single()
@@ -127,7 +150,7 @@ export const insertTwitch = async (
   payload: TwitchTable
 ): Promise<{ success: boolean; userData?: TwitchTable }> => {
   const { data: userData, error }: PostgrestResponse<TwitchTable> =
-    await supabase.from<TwitchTable>('twitchlink').upsert(payload)
+    await supabase.from<TwitchTable>(twitchTable).upsert(payload)
   if (userData) {
     return { success: true, ...userData }
   } else {

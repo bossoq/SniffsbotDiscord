@@ -2,7 +2,7 @@ import Ably from 'ably/promises'
 import { ablyKey } from '../config.json'
 import type { Types } from 'ably'
 
-const ably = new Ably.Realtime(ablyKey)
+export const ably = new Ably.Realtime(ablyKey)
 
 export const subMessage = (
   channelName: string,
