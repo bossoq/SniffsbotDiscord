@@ -4,6 +4,7 @@ import { CommandInteraction } from 'discord.js'
 import { SendEmbed } from '../lib/MessageEmbed'
 import { preparedCoinFlip } from '../lib/PreparedMessage'
 import { ably } from '../lib/AblySub'
+import { fliprate, flipthreshold } from '../config.json'
 
 interface ExtendsInteraction extends CommandInteraction {
   reply(options: SendEmbed | any): Promise<void | any>
@@ -44,22 +45,22 @@ module.exports = {
       if (twitchId) {
         const userCoin = await getCoin(twitchId.toLowerCase())
         if (userCoin && userCoin > playCoin) {
-          const flipRand = Math.floor(Math.random() * 2) == 0
-          let tossResult: string
-          if (flipRand) {
-            tossResult = 'h'
-          } else {
-            tossResult = 't'
-          }
-          let coinLeft: number
+          const flip = ['h', 't']
+          const flipRand =
+            Math.floor(
+              Math.random() * (playCoin > flipthreshold ? fliprate : 100)
+            ) > fliprate
+          const tossResult = String(
+            flip.find((toss) => (flipRand ? toss === side : toss !== side))
+          )
+          const coinLeft = flipRand ? userCoin + playCoin : userCoin - playCoin
           const channel = ably.channels.get('webfeed')
-          if (tossResult === side) {
-            coinLeft = userCoin + playCoin
-            const response = await insertCoin({
-              User_Name: twitchId,
-              Coin: coinLeft
-            })
-            if (!response.success) return
+          const response = await insertCoin({
+            User_Name: twitchId,
+            Coin: coinLeft
+          })
+          if (!response.success) return
+          if (flipRand) {
             channel.publish(
               'webfeed',
               winFeed
@@ -69,12 +70,6 @@ module.exports = {
                 .replace('{coin_left}', coinLeft.toString())
             )
           } else {
-            coinLeft = userCoin - playCoin
-            const response = await insertCoin({
-              User_Name: twitchId,
-              Coin: coinLeft
-            })
-            if (!response.success) return
             channel.publish(
               'webfeed',
               lossFeed
