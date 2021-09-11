@@ -44,7 +44,7 @@ module.exports = {
       const twitchId = userInfo.twitchId
       if (twitchId) {
         const userCoin = await getCoin(twitchId.toLowerCase())
-        if (userCoin && userCoin > playCoin) {
+        if (userCoin && userCoin >= playCoin) {
           const flip = ['h', 't']
           const flipRand =
             Math.floor(
