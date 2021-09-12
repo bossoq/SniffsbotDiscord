@@ -109,7 +109,7 @@ export const preparedLottoBuy = (payload: { [k: string]: any }): SendEmbed => {
   const resp = embedMessageBuilder([
     {
       name: `<${payload.username}>`,
-      value: `ซื้อ SniffsLotto หมายเลข ${payload.lotto.toString()} สำเร็จ`
+      value: `ซื้อ SniffsLotto หมายเลข ${payload.lotto.toString()} สำเร็จ (เงินคงเหลือ ${payload.coinleft.toString()} Sniffscoin)`
     }
   ])
   return { embeds: [resp] }
