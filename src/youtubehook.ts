@@ -4,6 +4,7 @@ import { sendMessage } from './app'
 import { preparedYTNotify } from './lib/PreparedMessage'
 import axios from 'axios'
 import { URLSearchParams } from 'url'
+import cron from 'node-cron'
 import { REST } from '@discordjs/rest'
 import { OAuth2Routes, Routes } from 'discord-api-types/v9'
 import { queryTwitch, insertTwitch } from './lib/supabase'
@@ -11,7 +12,9 @@ import {
   announceChannel,
   clientId,
   clientSecret,
-  callbackUrl
+  callbackUrl,
+  ytChannelId,
+  ytCallbackUrl
 } from './config.json'
 import type { VideosMeta } from './lib/YoutubeAPI'
 
@@ -36,7 +39,41 @@ export interface YTFeed {
 
 const port: number = 9876
 
-export const YTHookService = () => {
+const requestPubSub = async () => {
+  const params = new URLSearchParams()
+  params.append('hub.callback', ytCallbackUrl)
+  params.append(
+    'hub.topic',
+    `https://www.youtube.com/xml/feeds/videos.xml?channel_id=${ytChannelId}`
+  )
+  params.append('hub.verify', 'async')
+  params.append('hub.mode', 'subscribe')
+  params.append('hub.verify_token', '')
+  params.append('hub.secret', '')
+  params.append('hub.lease_seconds', String(60 * 60 * 24 * 10)) // expire in 10 days
+  const response = await axios.post(
+    'https://pubsubhubbub.appspot.com/subscribe',
+    params,
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
+    }
+  )
+  if (response.status === 202) {
+    console.log('Successfully Registered with PubSub service')
+  } else {
+    console.error('There is a problem registering with PubSub service')
+    await requestPubSub()
+  }
+}
+
+const pubSubCron = cron.schedule('0 0 * * 0', async () => {
+  console.log('Refreshing PubSub')
+  await requestPubSub()
+})
+
+export const YTHookService = async () => {
   const app = express()
 
   app.get('/ytsub', ({ query: { 'hub.challenge': challenge } }, res) => {
@@ -121,6 +158,13 @@ export const YTHookService = () => {
   try {
     app.listen(port)
     console.log(`Successfully start Express Server on ${port}`)
+    try {
+      await requestPubSub()
+      pubSubCron.start()
+      console.log('Start PubSub Cron')
+    } catch (error) {
+      console.error(`Failed to register PubSub ${error}`)
+    }
   } catch (error) {
     console.error(`Failed to start Express Server ${error}`)
   }
