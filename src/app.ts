@@ -48,7 +48,7 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command)
 }
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log(`Logged into Discord as ${client.user!.tag}`)
   try {
     ablyMessage()
@@ -57,7 +57,7 @@ client.once('ready', () => {
     console.error(`Failed to sub Ably ${error}`)
   }
   try {
-    YTHookService()
+    await YTHookService()
     console.log('Successfully start YT Webhook')
   } catch (error) {
     console.error('Failed to start YT Webhook')

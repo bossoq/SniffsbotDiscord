@@ -14,6 +14,7 @@
   "allowChannel": "##################",
   "announceChannel": "##################",
   "callbackUrl": "http#://########:####/######",
+  "ytCallbackUrl": "http#://#########/#######,
   "fliprate": {0 - 100},
   "flipthreshold": {any positive int}
 }
