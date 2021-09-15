@@ -73,7 +73,7 @@ const pubSubCron = cron.schedule('0 0 * * 0', async () => {
   await requestPubSub()
 })
 
-export const YTHookService = async () => {
+export const YTHookService = () => {
   const app = express()
 
   app.get('/ytsub', ({ query: { 'hub.challenge': challenge } }, res) => {
@@ -159,7 +159,9 @@ export const YTHookService = async () => {
     app.listen(port)
     console.log(`Successfully start Express Server on ${port}`)
     try {
-      await requestPubSub()
+      setTimeout(async () => {
+        await requestPubSub()
+      }, 10000)
       pubSubCron.start()
       console.log('Start PubSub Cron')
     } catch (error) {
