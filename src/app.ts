@@ -151,6 +151,7 @@ client.on("ready",async()=>{
   let servercount = await client.guilds.cache.reduce((a,b) => a+b.memberCount, 0)
 
   const activities = [
+    `${servers} servers`
     `looking ${servercount} members`
     `uwu I'm stinky`
     `Watching twitch.tv/sinffslive`
