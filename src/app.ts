@@ -62,6 +62,22 @@ client.once('ready', () => {
   } catch (error) {
     console.error('Failed to start YT Webhook')
   }
+  setInterval(() => {
+    const servers = client.guilds.cache.size
+    const servercount = client.guilds.cache.reduce(
+      (a, b) => a + b.memberCount,
+      0
+    )
+
+    const activities = [
+      `${servers} server`,
+      `looking ${servercount} members`,
+      `uwu I'm stinky`,
+      `Watching twitch.tv/sinffslive`
+    ]
+    const status = activities[Math.floor(Math.random() * activities.length)]
+    client!.user!.setPresence({ activities: [{ name: `${status}` }] })
+  }, 5000)
 })
 
 client.on('interactionCreate', async (interaction: Interaction) => {
