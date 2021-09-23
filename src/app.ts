@@ -62,7 +62,6 @@ client.once('ready', () => {
   } catch (error) {
     console.error('Failed to start YT Webhook')
   }
-
   setInterval(() => {
     const servers = client.guilds.cache.size
     const servercount = client.guilds.cache.reduce(
