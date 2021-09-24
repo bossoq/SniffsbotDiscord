@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { CommandInteraction, MessageEmbed } from 'discord.js'
 
 type Message = {
   name: string
@@ -10,6 +10,10 @@ export type SendEmbed = {
   content?: string
   embeds: MessageEmbed[]
   ephemeral?: boolean
+}
+
+export interface ExtendsInteraction extends CommandInteraction {
+  reply(options: SendEmbed | any): Promise<void | any>
 }
 
 const footer: string =

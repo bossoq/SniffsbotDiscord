@@ -9,6 +9,7 @@ import {
 import { ablyMessage } from './ably'
 import { YTHookService } from './youtubehook'
 import { guildId, token } from './config.json'
+import { Player } from './lib/Player'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { SendEmbed } from './lib/MessageEmbed'
 
@@ -33,9 +34,7 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     Intents.FLAGS.GUILD_MESSAGE_TYPING,
-    Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-    Intents.FLAGS.DIRECT_MESSAGE_TYPING
+    Intents.FLAGS.GUILD_VOICE_STATES
   ]
 })
 client.commands = new Collection()
@@ -47,6 +46,8 @@ for (const file of commandFiles) {
   const command = require(`./commands/${file}`)
   client.commands.set(command.data.name, command)
 }
+
+export const player = new Player(client)
 
 client.once('ready', () => {
   console.log(`Logged into Discord as ${client.user!.tag}`)

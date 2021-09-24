@@ -12,11 +12,11 @@ interface Command {
 
 const commands: { [k: string]: any }[] = []
 const commandFiles: string[] = fs
-  .readdirSync('./src/commands')
+  .readdirSync('./src/deploycommands')
   .filter((file) => file.endsWith('.ts'))
 
 for (const file of commandFiles) {
-  const command: Command = require(`./commands/${file}`)
+  const command: Command = require(`./deploycommands/${file}`)
   commands.push(command.data.toJSON())
 }
 
