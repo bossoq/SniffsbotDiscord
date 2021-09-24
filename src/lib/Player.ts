@@ -205,10 +205,14 @@ export class Player {
         .setURL(queue.tracks[0].url!)
         .setAuthor('Now Playing!', youtubeImg)
         .setImage(queue.tracks[0].thumbnailUrl!)
-      queue.interaction[0].followUp({
-        embeds: [message],
-        ephemeral: true
-      })
+      try {
+        queue.interaction[0].followUp({
+          embeds: [message],
+          ephemeral: true
+        })
+      } catch (err) {
+        console.error(err)
+      }
       player.on(AudioPlayerStatus.Idle, () => {
         nextSong()
       })
