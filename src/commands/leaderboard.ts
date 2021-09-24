@@ -1,11 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { getLeader } from '../lib/supabase'
-import { CommandInteraction } from 'discord.js'
-import { embedMessageBuilder, SendEmbed } from '../lib/MessageEmbed'
-
-interface ExtendsInteraction extends CommandInteraction {
-  reply(options: SendEmbed | any): Promise<void | any>
-}
+import { embedMessageBuilder, ExtendsInteraction } from '../lib/MessageEmbed'
 
 module.exports = {
   data: new SlashCommandBuilder()

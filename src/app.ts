@@ -6,9 +6,10 @@ import {
   Interaction,
   TextChannel
 } from 'discord.js'
-import { ablyMessage } from './ably'
-import { YTHookService } from './youtubehook'
+// import { ablyMessage } from './ably'
+// import { YTHookService } from './youtubehook'
 import { guildId, token } from './config.json'
+import { Player } from './lib/Player'
 import type { SlashCommandBuilder } from '@discordjs/builders'
 import type { SendEmbed } from './lib/MessageEmbed'
 
@@ -33,9 +34,7 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     Intents.FLAGS.GUILD_MESSAGE_TYPING,
-    Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-    Intents.FLAGS.DIRECT_MESSAGE_TYPING
+    Intents.FLAGS.GUILD_VOICE_STATES
   ]
 })
 client.commands = new Collection()
@@ -48,20 +47,22 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command)
 }
 
+export const player = new Player(client)
+
 client.once('ready', () => {
   console.log(`Logged into Discord as ${client.user!.tag}`)
-  try {
-    ablyMessage()
-    console.log('Successfully sub to Ably')
-  } catch (error) {
-    console.error(`Failed to sub Ably ${error}`)
-  }
-  try {
-    YTHookService()
-    console.log('Successfully start YT Webhook')
-  } catch (error) {
-    console.error('Failed to start YT Webhook')
-  }
+  // try {
+  //   ablyMessage()
+  //   console.log('Successfully sub to Ably')
+  // } catch (error) {
+  //   console.error(`Failed to sub Ably ${error}`)
+  // }
+  // try {
+  //   YTHookService()
+  //   console.log('Successfully start YT Webhook')
+  // } catch (error) {
+  //   console.error('Failed to start YT Webhook')
+  // }
 })
 
 client.on('interactionCreate', async (interaction: Interaction) => {

@@ -1,14 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { getCoin, queryTwitch, insertCoin } from '../lib/supabase'
-import { CommandInteraction } from 'discord.js'
-import { SendEmbed } from '../lib/MessageEmbed'
+import { ExtendsInteraction } from '../lib/MessageEmbed'
 import { preparedCoinFlip } from '../lib/PreparedMessage'
 import { ably } from '../lib/AblySub'
 import { fliprate, flipthreshold } from '../config.json'
-
-interface ExtendsInteraction extends CommandInteraction {
-  reply(options: SendEmbed | any): Promise<void | any>
-}
 
 const winFeed =
   '<span class="tag is-info has-text-weight-bold ml-2 mr-2 is-medium">{username}</span><span class="text-white">ได้รับ {prize} Sniffscoin <span class="icon"><i class="fas fa-hand-holding-usd"></i></span> Coinflip ออก{win_side} ({coin_left})</span>'
