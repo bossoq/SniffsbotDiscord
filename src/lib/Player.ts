@@ -11,8 +11,13 @@ import ytdl from 'discord-ytdl-core'
 import yts from 'yt-search'
 import { Queue } from './Queue'
 import { Track } from './Tracks'
-import type { Client, GuildMember } from 'discord.js'
-import type { Filters, Null } from './Utils'
+import {
+  Client,
+  GuildMember,
+  MessageActionRow,
+  MessageSelectMenu,
+  SelectMenuInteraction
+} from 'discord.js'
 import { embedMessageBuilder, ExtendsInteraction } from './MessageEmbed'
 
 const youtubeImg: string =
@@ -52,7 +57,7 @@ export class Player {
   }
 
   protected _createQueue(
-    interaction: ExtendsInteraction,
+    interaction: ExtendsInteraction | SelectMenuInteraction,
     track: Track
   ): void | boolean {
     if (!interaction.guildId) return
@@ -95,10 +100,16 @@ export class Player {
       .setURL(track.url!)
       .setAuthor('Queue Added!', youtubeImg)
       .setImage(track.thumbnailUrl!)
-    interaction.reply({
-      embeds: [message],
-      ephemeral: true
-    })
+    if (interaction.replied) {
+      interaction.editReply({
+        embeds: [message]
+      })
+    } else {
+      interaction.reply({
+        embeds: [message],
+        ephemeral: true
+      })
+    }
   }
 
   getQueue(interaction: ExtendsInteraction): void | boolean {
@@ -128,17 +139,77 @@ export class Player {
     }
   }
 
-  async play(interaction: ExtendsInteraction): Promise<void | boolean> {
+  isSelectMenu(data: any): data is SelectMenuInteraction {
+    return 'values' in data
+  }
+
+  async play(
+    interaction: ExtendsInteraction | SelectMenuInteraction,
+    values?: string
+  ): Promise<void | boolean> {
     if (!interaction) return
     let songUrl: string
-    const inputSong = interaction.options.getString('song')!
+    let inputSong: string
+    if (this.isSelectMenu(interaction)) {
+      inputSong = values!
+    } else {
+      inputSong = interaction.options.getString('song')!
+    }
     if (
       inputSong.includes('https://') &&
       (inputSong.includes('youtube.com') || inputSong.includes('youtu.be'))
     ) {
       songUrl = inputSong
     } else {
-      return
+      const videos = await yts(inputSong)
+      if (!videos) {
+        interaction.reply({
+          content: 'No song found.',
+          ephemeral: true
+        })
+        return
+      } else {
+        const top5Result = videos.videos.slice(0, 5)
+        const resultMessage: { name: string; value: string }[] = []
+        top5Result.forEach((result) => {
+          const resultObj = {
+            name: result.title,
+            value: result.author.name
+          }
+          resultMessage.push(resultObj)
+        })
+        const message = embedMessageBuilder(resultMessage)
+        message
+          .setTitle(`Search result for ${inputSong}`)
+          .setAuthor('Sniffsbot Search Result', youtubeImg)
+
+        const resultComp: {
+          label: string
+          description: string
+          value: string
+        }[] = []
+        top5Result.forEach((result) => {
+          const resultObj = {
+            label: result.title,
+            description: result.author.name,
+            value: result.url
+          }
+          resultComp.push(resultObj)
+        })
+        const compRow = new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId('searchresult')
+            .setPlaceholder('Nothing selected')
+            .addOptions(resultComp)
+        )
+
+        interaction.reply({
+          embeds: [message],
+          components: [compRow],
+          ephemeral: true
+        })
+        return
+      }
     }
     const resp = await ytdl.getBasicInfo(songUrl)
     const streamObj = {

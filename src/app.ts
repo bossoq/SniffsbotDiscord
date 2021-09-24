@@ -99,6 +99,19 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   }
 })
 
+client.on('interactionCreate', async (interaction: Interaction) => {
+  if (!interaction.isSelectMenu()) return
+
+  if (interaction.customId === 'searchresult') {
+    interaction.update({
+      content: 'Song selected',
+      components: [],
+      embeds: []
+    })
+    player.play(interaction, interaction.values[0])
+  }
+})
+
 export const sendMessage = async (
   channelId: string,
   message: string | SendEmbed
