@@ -61,7 +61,7 @@ module.exports = {
               winFeed
                 .replace('{username}', twitchId)
                 .replace('{prize}', (playCoin * 2).toString())
-                .replace('{win_side}', flipRand ? 'หัว' : 'ก้อย')
+                .replace('{win_side}', tossResult === 'h' ? 'หัว' : 'ก้อย')
                 .replace('{coin_left}', coinLeft.toString())
             )
           } else {
@@ -69,13 +69,13 @@ module.exports = {
               'webfeed',
               lossFeed
                 .replace('{username}', twitchId)
-                .replace('{win_side}', flipRand ? 'หัว' : 'ก้อย')
+                .replace('{win_side}', tossResult === 'h' ? 'หัว' : 'ก้อย')
                 .replace('{coin_left}', coinLeft.toString())
             )
           }
           const payload = {
             username: twitchId,
-            win_side: flipRand ? 'หัว' : 'ก้อย',
+            win_side: tossResult === 'h' ? 'หัว' : 'ก้อย',
             coin_left: coinLeft,
             win: tossResult === side,
             prize: playCoin * 2
