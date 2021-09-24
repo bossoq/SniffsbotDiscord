@@ -6,8 +6,8 @@ import {
   Interaction,
   TextChannel
 } from 'discord.js'
-// import { ablyMessage } from './ably'
-// import { YTHookService } from './youtubehook'
+import { ablyMessage } from './ably'
+import { YTHookService } from './youtubehook'
 import { guildId, token } from './config.json'
 import { Player } from './lib/Player'
 import type { SlashCommandBuilder } from '@discordjs/builders'
@@ -51,18 +51,34 @@ export const player = new Player(client)
 
 client.once('ready', () => {
   console.log(`Logged into Discord as ${client.user!.tag}`)
-  // try {
-  //   ablyMessage()
-  //   console.log('Successfully sub to Ably')
-  // } catch (error) {
-  //   console.error(`Failed to sub Ably ${error}`)
-  // }
-  // try {
-  //   YTHookService()
-  //   console.log('Successfully start YT Webhook')
-  // } catch (error) {
-  //   console.error('Failed to start YT Webhook')
-  // }
+  try {
+    ablyMessage()
+    console.log('Successfully sub to Ably')
+  } catch (error) {
+    console.error(`Failed to sub Ably ${error}`)
+  }
+  try {
+    YTHookService()
+    console.log('Successfully start YT Webhook')
+  } catch (error) {
+    console.error('Failed to start YT Webhook')
+  }
+  setInterval(() => {
+    const servers = client.guilds.cache.size
+    const servercount = client.guilds.cache.reduce(
+      (a, b) => a + b.memberCount,
+      0
+    )
+
+    const activities = [
+      `${servers} servers`,
+      `looking ${servercount} members`,
+      `uwu I'm stinky`,
+      `Watching twitch.tv/sniffslive`
+    ]
+    const status = activities[Math.floor(Math.random() * activities.length)]
+    client!.user!.setPresence({ activities: [{ name: `${status}` }] })
+  }, 5000)
 })
 
 client.on('interactionCreate', async (interaction: Interaction) => {
