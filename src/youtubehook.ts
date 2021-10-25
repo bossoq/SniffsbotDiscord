@@ -48,8 +48,6 @@ const requestPubSub = async () => {
   )
   params.append('hub.verify', 'async')
   params.append('hub.mode', 'subscribe')
-  params.append('hub.verify_token', '')
-  params.append('hub.secret', '')
   params.append('hub.lease_seconds', String(60 * 60 * 24 * 10)) // expire in 10 days
   const response = await axios.post(
     'https://pubsubhubbub.appspot.com/subscribe',
