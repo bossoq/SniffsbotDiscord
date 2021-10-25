@@ -129,7 +129,7 @@ export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
     resp = embedMessageBuilder([])
   }
   resp
-    .setTitle(`ประกาศผลรางวัล Sniffscoin ประจำวันที่ ${getThaiDateString()}`)
+    .setTitle(`ประกาศผลรางวัล SniffsLotto ประจำวันที่ ${getThaiDateString()}`)
     .setDescription(
       `เลขที่ออกได้แก่ ${payload.win_number} รางวัลรวม ${payload.payout} Sniffscoin`
     )
