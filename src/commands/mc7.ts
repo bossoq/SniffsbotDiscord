@@ -41,7 +41,7 @@ module.exports = {
           .setTitle('Minecraft ATM7 Status')
           .setDescription(res.data.motd)
           .setThumbnail(
-            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsbaby.png'
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm7.png'
           )
         interaction.reply({
           embeds: [resp],
