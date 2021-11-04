@@ -48,8 +48,38 @@ module.exports = {
           ephemeral: true
         })
       } else {
+        const resp = embedMessageBuilder([
+          {
+            name: 'Server Address',
+            value: `${mc6}:${mc6port}`
+          },
+          {
+            name: 'Version',
+            value: 'Unknown',
+            inline: true
+          },
+          {
+            name: 'Status',
+            value: 'Offline',
+            inline: true
+          },
+          {
+            name: 'Players',
+            value: '0 / 0',
+            inline: true
+          }
+        ])
+        resp
+          .setTitle('Minecraft ATM6 Status')
+          .setDescription('Server is offline')
+          .setThumbnail(
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6.png'
+          )
+          .setImage(
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6offline.png'
+          )
         interaction.reply({
-          content: 'Minecraft ATM6 ออฟไลน์',
+          embeds: [resp],
           ephemeral: true
         })
       }
