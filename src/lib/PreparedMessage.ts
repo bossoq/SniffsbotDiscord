@@ -21,7 +21,7 @@ const thaiMonth: string[] = [
 const getThaiDateString = () => {
   const now = new Date()
   const day = now.getDate()
-  const month = thaiMonth[now.getMonth() - 1]
+  const month = thaiMonth[now.getMonth()]
   const year = now.getFullYear() + 543
   return `${day} ${month} ${year}`
 }
