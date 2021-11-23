@@ -44,9 +44,8 @@ module.exports = {
           .setThumbnail(
             'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm7.png'
           )
-        interaction.reply({
-          embeds: [resp],
-          ephemeral: true
+        interaction.editReply({
+          embeds: [resp]
         })
       } else {
         const resp = embedMessageBuilder([
@@ -79,15 +78,13 @@ module.exports = {
           .setImage(
             'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6offline.png'
           )
-        interaction.reply({
-          embeds: [resp],
-          ephemeral: true
+        interaction.editReply({
+          embeds: [resp]
         })
       }
     } else {
-      interaction.reply({
-        content: 'ไม่สามารถตรวจสอบสถานะของเซิฟเวอร์ได้',
-        ephemeral: true
+      interaction.editReply({
+        content: 'ไม่สามารถตรวจสอบสถานะของเซิฟเวอร์ได้'
       })
     }
   }
