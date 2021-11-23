@@ -3,7 +3,7 @@ import { ExtendsInteraction } from '../lib/MessageEmbed'
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('mc6')
-    .setDescription('Retrieve Minecraft ATM6 Server Status!'),
+    .setName('mc7sniffs')
+    .setDescription('Retrieve Minecraft ATM7 Sniffs Server Status!'),
   async execute(interaction: ExtendsInteraction): Promise<void> {}
 }

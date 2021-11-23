@@ -8,6 +8,7 @@ module.exports = {
     .setName('mc7')
     .setDescription('Retrieve Minecraft ATM7 Server Status!'),
   async execute(interaction: ExtendsInteraction): Promise<void> {
+    interaction.deferReply({ ephemeral: true })
     const res = await axios.get(
       `https://mcapi.us/server/status?ip=${mc7}&port=${mc7port}`
     )
@@ -48,8 +49,38 @@ module.exports = {
           ephemeral: true
         })
       } else {
+        const resp = embedMessageBuilder([
+          {
+            name: 'Server Address',
+            value: `${mc7}:${mc7port}`
+          },
+          {
+            name: 'Version',
+            value: 'Unknown',
+            inline: true
+          },
+          {
+            name: 'Status',
+            value: 'Offline',
+            inline: true
+          },
+          {
+            name: 'Players',
+            value: '0 / 0',
+            inline: true
+          }
+        ])
+        resp
+          .setTitle('Minecraft ATM7 Status')
+          .setDescription('Server is offline')
+          .setThumbnail(
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm7.png'
+          )
+          .setImage(
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6offline.png'
+          )
         interaction.reply({
-          content: 'Minecraft ATM7 ออฟไลน์',
+          embeds: [resp],
           ephemeral: true
         })
       }

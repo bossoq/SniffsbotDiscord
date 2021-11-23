@@ -1,15 +1,16 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import axios from 'axios'
 import { embedMessageBuilder, ExtendsInteraction } from '../lib/MessageEmbed'
-import { mc6, mc6port } from '../config.json'
+import { mc7sniffs, mc7sniffsport } from '../config.json'
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('mc6')
-    .setDescription('Retrieve Minecraft ATM6 Server Status!'),
+    .setName('mc7sniffs')
+    .setDescription('Retrieve Minecraft ATM7 Sniffs Server Status!'),
   async execute(interaction: ExtendsInteraction): Promise<void> {
+    interaction.deferReply({ ephemeral: true })
     const res = await axios.get(
-      `https://mcapi.us/server/status?ip=${mc6}&port=${mc6port}`
+      `https://mcapi.us/server/status?ip=${mc7sniffs}&port=${mc7sniffsport}`
     )
     if (res.data) {
       if (res.data.online) {
@@ -19,7 +20,7 @@ module.exports = {
         const resp = embedMessageBuilder([
           {
             name: 'Server Address',
-            value: `${mc6}:${mc6port}`
+            value: `${mc7sniffs}:${mc7sniffsport}`
           },
           {
             name: 'Version',
@@ -38,10 +39,10 @@ module.exports = {
           }
         ])
         resp
-          .setTitle('Minecraft ATM6 Status')
+          .setTitle('Minecraft ATM7 Status')
           .setDescription(res.data.motd)
           .setThumbnail(
-            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6.png'
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm7.png'
           )
         interaction.reply({
           embeds: [resp],
@@ -51,7 +52,7 @@ module.exports = {
         const resp = embedMessageBuilder([
           {
             name: 'Server Address',
-            value: `${mc6}:${mc6port}`
+            value: `${mc7sniffs}:${mc7sniffsport}`
           },
           {
             name: 'Version',
@@ -70,10 +71,10 @@ module.exports = {
           }
         ])
         resp
-          .setTitle('Minecraft ATM6 Status')
+          .setTitle('Minecraft ATM7 Status')
           .setDescription('Server is offline')
           .setThumbnail(
-            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6.png'
+            'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm7.png'
           )
           .setImage(
             'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/atm6offline.png'
