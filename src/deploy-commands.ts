@@ -10,7 +10,7 @@ interface Command {
   execute(interaction: BaseCommandInteraction): Promise<void>
 }
 
-const commands: { [k: string]: any }[] = []
+const commands: Record<string, any>[] = []
 const commandFiles: string[] = fs
   .readdirSync('./src/deploycommands')
   .filter((file) => file.endsWith('.ts'))

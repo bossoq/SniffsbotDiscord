@@ -26,9 +26,7 @@ const getThaiDateString = () => {
   return `${day} ${month} ${year}`
 }
 
-export const preparedLiveNotify = (payload: {
-  [k: string]: any
-}): SendEmbed => {
+export const preparedLiveNotify = (payload: Record<string, any>): SendEmbed => {
   const profileImg: string =
     'https://teopwbuwkgtwnhmddsuj.supabase.in/storage/v1/object/public/sniffsbot-asset/images/sniffsprofile.png'
   const embedMessage = embedMessageBuilder([
@@ -59,7 +57,7 @@ export const preparedLiveNotify = (payload: {
   }
 }
 
-export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
+export const preparedCoinFlip = (payload: Record<string, any>): SendEmbed => {
   let resp: MessageEmbed
   if (payload.win) {
     resp = embedMessageBuilder([
@@ -105,7 +103,7 @@ export const preparedCoinFlip = (payload: { [k: string]: any }): SendEmbed => {
   return { embeds: [resp] }
 }
 
-export const preparedLottoBuy = (payload: { [k: string]: any }): SendEmbed => {
+export const preparedLottoBuy = (payload: Record<string, any>): SendEmbed => {
   const resp = embedMessageBuilder([
     {
       name: `<${payload.username}>`,
@@ -115,7 +113,7 @@ export const preparedLottoBuy = (payload: { [k: string]: any }): SendEmbed => {
   return { embeds: [resp] }
 }
 
-export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
+export const preparedLottoDraw = (payload: Record<string, any>): SendEmbed => {
   let resp: MessageEmbed
   if (Object.entries(payload.usernames)) {
     resp = embedMessageBuilder(
@@ -139,7 +137,7 @@ export const preparedLottoDraw = (payload: { [k: string]: any }): SendEmbed => {
   return { embeds: [resp] }
 }
 
-export const preparedRaffleBuy = (payload: { [k: string]: any }): SendEmbed => {
+export const preparedRaffleBuy = (payload: Record<string, any>): SendEmbed => {
   const resp = embedMessageBuilder([
     {
       name: `<${payload.username}>`,
@@ -149,9 +147,7 @@ export const preparedRaffleBuy = (payload: { [k: string]: any }): SendEmbed => {
   return { embeds: [resp] }
 }
 
-export const preparedRaffleDraw = (payload: {
-  [k: string]: any
-}): SendEmbed => {
+export const preparedRaffleDraw = (payload: Record<string, any>): SendEmbed => {
   const resp = embedMessageBuilder([
     {
       name: `<${payload.username}>`,
