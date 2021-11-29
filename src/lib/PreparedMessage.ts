@@ -107,7 +107,7 @@ export const preparedLottoBuy = (payload: Record<string, any>): SendEmbed => {
   const resp = embedMessageBuilder([
     {
       name: `<${payload.username}>`,
-      value: `ซื้อ SniffsLotto หมายเลข ${payload.lotto.toString()} สำเร็จ (เงินคงเหลือ ${payload.coinleft.toString()} Sniffscoin)`
+      value: `ซื้อ SniffsLotto หมายเลข ${payload.lotto.toString()} จำนวน ${payload.count.toString()} ใบ สำเร็จ (เงินคงเหลือ ${payload.coinleft.toString()} Sniffscoin)`
     }
   ])
   return { embeds: [resp] }
